@@ -1,0 +1,22 @@
+{
+  "name": "jls-solutions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucianocopa45/JLS-Solutions.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucianocopa45/JLS-Solutions/issues"
+  },
+  "homepage": "https://github.com/lucianocopa45/JLS-Solutions#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
