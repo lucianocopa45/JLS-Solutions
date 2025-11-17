@@ -17,8 +17,13 @@ const HOST = '0.0.0.0';
 
 app.use(helmet());
 app.use(cors({
-  origin: '*',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  origin: [
+    "http://localhost:3000",
+    "http://localhost:3040",
+    "https://jls-solutions-production.up.railway.app"
+  ],
+  methods: ["GET","POST","PUT","PATCH","DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization", "Accept"],
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
