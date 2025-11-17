@@ -5,8 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app.js"
+    "test": "jest --detectOpenHandles",
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,16 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.1",
     "mysql2": "^3.15.3",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "babel-jest": "^30.2.0",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.11",
+    "supertest": "^7.1.4"
   }
 }
