@@ -250,7 +250,7 @@ router.post('/login', login);
 
 router.get("/paginatedTasks/:page/:limit", auth, authorizeRole(["EMPLEADO", "ADMIN"]), validatorQueryPagination, controller.listUsersPage);
 // router.post('/createUser', auth, authorizeRole(["ADMIN"]),controller.postUser);
-router.post("/createUserDb", auth, authorizeRole(["ADMIN"]), validatorCreateUser, controller.postUserDb);
+router.post("/createUserDb", validatorCreateUser, controller.postUserDb);
 router.get("/getByIdUser/:id", auth,authorizeRole(["ADMIN"]),validatorUserIdParam, controller.getUserById);
 router.get("/getByIdUserName/:userName", auth, authorizeRole(["ADMIN"]), validatorGetUsername,controller.getUserByUserName);
 router.put("/putUser/:id", auth,authorizeRole(["ADMIN"]),validatorUpdateUser, controller.putUser);
