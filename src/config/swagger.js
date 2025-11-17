@@ -90,7 +90,18 @@ const options = {
 const swaggerSpec = swaggerJsdoc(options);
 
 function setupSwagger(app) {
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-}
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    swaggerOptions: {
+      supportedSubmitMethods: ['get', 'post', 'put', 'patch', 'delete'],
+      requestInterceptor: (req) => {
+        req.headers['Accept'] = 'application/json';
+        return req;
+      }
+    }
+  })
+);}
 
 export { swaggerSpec, setupSwagger, swaggerUi };
