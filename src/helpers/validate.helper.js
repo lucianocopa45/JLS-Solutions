@@ -6,6 +6,6 @@ export const validatorResult = (req, res, next) => {
         return next()
     } catch (error){
         res.status(400)
-        res.send({ errors: error.array() })
+        res.send({ errors: error.mapped() })
     }
 }

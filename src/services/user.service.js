@@ -1,40 +1,20 @@
 import { User } from "../models/user.model.js";
 import { db } from "../config/database.js";
-import bcrypt from 'bcrypt';
-import dayjs from 'dayjs';
 
-const usuarios = [];
+export const listUsers = async (page, limit) => {
+    try {
+        const offset = (page - 1) * limit;
 
-export const createUser = (userData) => {
+        const [rows] = await db.query("SELECT id_user, email, username, created_at, id_role FROM user LIMIT ? OFFSET ?", [limit, offset]);
+        const [countResult] = await db.query("SELECT COUNT(*) AS total FROM user");
+        const totalItems = countResult[0]?.total || 0;
+        const totalPages = Math.ceil(totalItems / limit);
 
-    const newUser = new User(
-        usuarios.length + 1,
-        userData.nombre,
-        userData.apellido,
-        userData.email,
-        userData.password,
-        userData.rol
-    );
-    
-    usuarios.push(newUser);
-    return newUser;
-}
-
-export const listUser = async () => {
-    try{ 
-    const [result] = await db.query("SELECT * FROM user");
-
-    const usuarios = result.map(u => ({
-      ...u,
-      created_at: dayjs(u.created_at).format('DD/MM/YYYY HH:mm:ss')
-    }));
-
-    return usuarios;
-    //console.log(result);
-    } catch(error){
-        console.error(error);
+        return { page, limit, totalItems, totalPages, data: rows };
+    } catch (error) {
+        throw error;
     }
-}
+};
 
 export const crearUsuarioBd = async (data) => {
     try{
@@ -55,13 +35,23 @@ export const crearUsuarioBd = async (data) => {
         return { 
             id: result.insertId,
             email: nuevoUsuarioDb.email,
-            password: nuevoUsuarioDb.password,
             username: nuevoUsuarioDb.username,
             created_at: nuevoUsuarioDb.created_at,
             id_role: nuevoUsuarioDb.id_role
         }; 
 
     } catch(error) {
+        throw error;
+    }
+}
+
+export const getUsername = async (userName) => {
+    try{
+    const query = 'SELECT * FROM user where username like ?;';
+    const [result] = await db.query(query, [`%${userName}%`]);
+
+    return result;
+    } catch (error){
         throw error;
     }
 }

@@ -1,6 +1,7 @@
 import e from 'express';
-import { createUser, listUser, crearUsuarioBd, getUserId, updateUser, deleteById } from '../services/user.service.js';
-import ApiError from '../utils/ApiError.js'
+import { listUsers, crearUsuarioBd, getUserId, getUsername, updateUser, deleteById } from '../services/user.service.js';
+import { userHandleMySQLError } from '../utils/user.mysqlErrorHandler.js';
+// import ApiError from '../utils/ApiError.js'
 
 export const postUser = (req, res) =>{
     const userData = req.body;
@@ -13,15 +14,19 @@ export const postUser = (req, res) =>{
     res.status(201).json(newUser);
 }
 
-export const getAllUser = async (req, res) => {
-    const allUsers = await listUser();
-    console.log(allUsers);
-    if (!allUsers) {
-        return res.status(400).json({ error: "No hay Usuarios" });
+export const listUsersPage = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1; 
+        const limit = parseInt(req.query.limit) || 10;
+        const dataUsers = await listUsers(page, limit);
+        if (!dataUsers || dataUsers.data.length === 0) {
+            return res.status(404).json({ error: "No se encontraron usuarios" });
+        }
+        res.status(200).json(dataUsers);
+    } catch (error) {
+        userHandleMySQLError(error, req.query); 
+        throw error;
     }
-
-    res.status(200).json(allUsers);
-    console.log(allUsers);
 }
 
 export const postUserDb = async (req, res) => {
@@ -32,37 +37,8 @@ export const postUserDb = async (req, res) => {
     const newUserDb = await crearUsuarioBd(dataDb);
     return res.status(201).json({ message: 'Usuario creado exitosamente', user: newUserDb });
     } catch (error) {
-    console.error("Error crudo de DB:", error);
-
-    switch (error.code) {
-    case "ER_DUP_ENTRY":
-        if (error.sqlMessage.includes("email")) {
-        throw new ApiError(400, "El email ya está registrado.");
-        }
-        if (error.sqlMessage.includes("username")) {
-        throw new ApiError(400, "El nombre de usuario ya está en uso.");
-        }
-        throw new ApiError(400, "Datos duplicados.");
-
-    case "ER_NO_REFERENCED_ROW_2":
-        throw new ApiError(400, `El rol con id ${dataDb.id_role} no existe.`);
-
-    case "ER_ROW_IS_REFERENCED_2":
-        throw new ApiError(400, "No se puede eliminar este usuario porque está siendo usado en otra tabla.");
-
-    case "ER_BAD_NULL_ERROR":
-        throw new ApiError(400, "Falta un dato obligatorio.");
-
-    case "ER_TRUNCATED_WRONG_VALUE_FOR_FIELD":
-        throw new ApiError(400, "El tipo de dato ingresado no es válido.");
-
-    case "PROTOCOL_CONNECTION_LOST":
-    case "ECONNREFUSED":
-        throw new ApiError(500, "Error de conexión con la base de datos.");
-
-    default:
-        throw new ApiError(500, "Error interno al crear el usuario.");
-    }
+        userHandleMySQLError(error, req.query); 
+        throw error;
 }
 };
 
@@ -81,6 +57,23 @@ export const getUserById = async (req, res) => {
         console.error(error)
     }
 }
+export const getUserByUserName = async (req, res) => {
+    try {
+        const { userName } = req.params;
+console.log(userName);
+        if (!userName) {
+            return res.status(400).json({ message: "Username is required" });
+        }
+
+        const dataUser = await getUsername(userName);
+
+        return res.status(200).json(dataUser);
+
+    } catch (error) {
+        console.error("Error in getUserByUserName:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
 
 export const putUser = async (req, res) => {
     try{
@@ -106,36 +99,8 @@ export const putUser = async (req, res) => {
     });
     
     } catch(error){
-        console.error("Error en la función putUser:", error);
-    switch (error.code) {
-    case "ER_DUP_ENTRY":
-        if (error.sqlMessage.includes("email")) {
-        throw new ApiError(400, "El email ya está registrado.");
-        }
-        if (error.sqlMessage.includes("username")) {
-        throw new ApiError(400, "El nombre de usuario ya está en uso.");
-        }
-        throw new ApiError(400, "Datos duplicados.");
-
-    case "ER_NO_REFERENCED_ROW_2":
-        throw new ApiError(400, `El rol con id ${dataDb.id_role} no existe.`);
-
-    case "ER_ROW_IS_REFERENCED_2":
-        throw new ApiError(400, "No se puede eliminar este usuario porque está siendo usado en otra tabla.");
-
-    case "ER_BAD_NULL_ERROR":
-        throw new ApiError(400, "Falta un dato obligatorio.");
-
-    case "ER_TRUNCATED_WRONG_VALUE_FOR_FIELD":
-        throw new ApiError(400, "El tipo de dato ingresado no es válido.");
-
-    case "PROTOCOL_CONNECTION_LOST":
-    case "ECONNREFUSED":
-        throw new ApiError(500, "Error de conexión con la base de datos.");
-
-    default:
-        throw new ApiError(500, "Error interno al crear el usuario.");
-    }
+        userHandleMySQLError(error, req.query); 
+        throw error;
     }
 }
 

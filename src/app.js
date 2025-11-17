@@ -1,14 +1,13 @@
 import express from "express";
-import router from "./routes/user.routes.js";
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
 import ApiError from './utils/ApiError.js'
 import errorHandler from './middlewares/error.middleware.js';
-// import mainRoutes from './routes/index.js';
-// import swaggerUi from 'swagger-ui-express'; 
-// import { swaggerSpec } from './config/swagger.js';
+import mainRoutes from './routes/index.js';
+import swaggerUi from 'swagger-ui-express'; // ⬅️ ¡Verifica que esta línea exista!
+import { swaggerSpec } from './config/swagger.js';
 
 dotenv.config();
 
@@ -24,9 +23,9 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 app.use(morgan('dev'));
-// app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); 
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // ⬅️ Nuevo endpoint
 
-app.use('/api', router);
+app.use('/api', mainRoutes);
 
 app.use((req, res, next) => {
     const customMessage = `El recurso al que intenta acceder (${req.originalUrl}) no existe o ha sido movido.`;
