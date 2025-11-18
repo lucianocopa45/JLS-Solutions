@@ -34,10 +34,15 @@ const dbConfig = {
     database: process.env.DB_NAME,
     port: process.env.DB_PORT,
     
-    // Opciones clave para el Pool:
-    waitForConnections: true, // Esperar si todas las conexiones están en uso
-    connectionLimit: 15,       // Máximo de conexiones en el Pool
-    queueLimit: 0              // Sin límite para la cola de peticiones
+// Opciones clave para el Pool:
+    waitForConnections: true, 
+    connectionLimit: 15,     
+    queueLimit: 0,
+    
+    // CONFIGURACIÓN PARA ENTORNO CLOUD (Railway)
+    enableKeepAlive: true,        // Mantiene la conexión viva enviando paquetes
+    keepAliveInitialDelay: 0,     // Inicia la verificación inmediatamente
+    idleTimeout: 30000            // Cierra conexiones inactivas después de 30 segundos (Opcional, pero ayuda)
 };
 
 /**
