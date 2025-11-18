@@ -14,15 +14,39 @@ export const postTask = async (req, res) => {
 }
 
 // GET /tasks?page=x&limit=y
-export const listTasks = async (req, res) => {
-    try {
-        const page = parseInt(req.params.page, 10) || 1; 
-        const limit = parseInt(req.params.limit, 10) || 10;
+// export const listTasks = async (req, res) => {
+//     try {
+//         const page = parseInt(req.params.page, 10) || 1; 
+//         const limit = parseInt(req.params.limit, 10) || 10;
         
-        // Verificación extra para prevenir valores negativos si el validador falla:
-        const safePage = page > 0 ? page : 1;
-        const safeLimit = limit > 0 ? limit : 10;
+//         // Verificación extra para prevenir valores negativos si el validador falla:
+//         const safePage = page > 0 ? page : 1;
+//         const safeLimit = limit > 0 ? limit : 10;
 
+//         const dataTasks = await taskService.listTasks(safePage, safeLimit);
+
+//         if (!dataTasks || dataTasks.data.length === 0) {
+//             return res.status(404).json({ error: "No se encontraron tareas" });
+//         }
+//         res.status(200).json(dataTasks);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: "Error interno del servidor", error: error.message });
+//     }
+// }
+export const listTasks = async (req, res, next) => {
+    try {
+        // 🚨 1. EXTRACCIÓN Y SANEAMIENTO OBLIGATORIO:
+        // Usar parseInt() con base 10 Y asegurar un valor predeterminado si es NaN o <= 0.
+        const page = parseInt(req.params.page, 10);
+        const limit = parseInt(req.params.limit, 10);
+
+        // 🚨 2. VERIFICACIÓN CRÍTICA (Garantía de Números Positivos):
+        // Si parseInt resulta en NaN, 0, o un número negativo, usa el valor por defecto.
+        const safePage = (isNaN(page) || page <= 0) ? 1 : page;
+        const safeLimit = (isNaN(limit) || limit <= 0) ? 10 : limit;
+        
+        // 3. Llamar al servicio con los valores saneados
         const dataTasks = await taskService.listTasks(safePage, safeLimit);
 
         if (!dataTasks || dataTasks.data.length === 0) {
@@ -34,7 +58,6 @@ export const listTasks = async (req, res) => {
         res.status(500).json({ message: "Error interno del servidor", error: error.message });
     }
 }
-
 // GET /tasks/:id
 export const getTaskById = async (req, res) => {
     try {
