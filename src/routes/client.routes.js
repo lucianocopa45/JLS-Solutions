@@ -52,7 +52,8 @@ const router = express.Router();
  *         email: "lucho@example.com"
  *         phone: "1133445566"
  *         address: "Av. Siempreviva 742"
- *
+ *         id_user: 1
+ * 
  *     ClientCreate:
  *       type: object
  *       required:
@@ -70,13 +71,17 @@ const router = express.Router();
  *           type: string
  *         address:
  *           type: string
+ *         id_user: 
+ *         type: integer
+ * 
  *       example:
  *         first_name: "Luciano"
  *         last_name: "Copa"
  *         email: "lucho@example.com"
  *         phone: "1133445566"
  *         address: "Buenos Aires"
- *
+ *         id_user: 1
+ * 
  *     ClientUpdate:
  *       type: object
  *       properties:

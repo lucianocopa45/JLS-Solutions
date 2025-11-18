@@ -4,7 +4,7 @@ import { db } from '../config/database.js';
 
 // --- CREATE ---
 export const createProject = async (data) => {
-    // Note: closed_at and updated_at are optional/handled by DB on creation
+    
     const query = "INSERT INTO projects(name, description, start_date, end_date, status, id_client, id_manager, budget, closed_at) VALUES (?,?,?,?,?,?,?,?,?);"
     const newProject = new Project(
         null,
@@ -35,8 +35,8 @@ export const createProject = async (data) => {
 
     // Nota: El objeto devuelto podría no incluir updated_at, ya que se genera en DB.
     return {
-        id_project: result.insertId,
-        ...newProject
+        ...newProject,
+        id_project: result.insertId
     };
 };
 
