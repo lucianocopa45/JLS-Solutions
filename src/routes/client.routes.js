@@ -304,8 +304,8 @@ const router = express.Router();
  */
 
 
-router.post('/postClient', auth, authorizeRole(["ADMIN"]),validatorCreateClient, controller.postClient);
-router.put('/putClient/:id', auth, authorizeRole(["ADMIN"]),validatorUpdateClient, controller.putClient);
+router.post('/postClient', auth, authorizeRole(["ADMIN", "CLIENTE"]),validatorCreateClient, controller.postClient);
+router.put('/putClient/:id', auth, authorizeRole(["ADMIN", "CLIENTE"]),validatorUpdateClient, controller.putClient);
 router.delete('/deleteClientById/:id', auth, authorizeRole(["ADMIN"]),validatorGetClientById, controller.deleteClient);
 router.get('/paginatedClients/:page/:limit', auth, authorizeRole(["ADMIN"]),validatorPageClient, controller.paginatedClients);
 router.get('/getClientById/:id', auth, authorizeRole(["ADMIN"]),validatorGetClientById, controller.getClient);
