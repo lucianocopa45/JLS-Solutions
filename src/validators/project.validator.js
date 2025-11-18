@@ -35,7 +35,23 @@ const validateProjectBody = (isUpdate = false) => [
         .optional({ nullable: true }).isFloat({ min: 0 }).withMessage('El presupuesto debe ser un número positivo'),
         
     check('closed_at')
-        .optional({ nullable: true }).isDate().withMessage('La fecha de cierre debe ser un formato de fecha y hora válido')
+        .optional({ nullable: true }) // Permite que sea opcional o null
+        .custom((value) => {
+            if (value === null) {
+                return true; // Si es null, siempre pasa.
+            }
+            
+            // Intenta crear un objeto Date con el valor (ISO, YYYY-MM-DD HH:mm:ss, etc.)
+            const date = new Date(value);
+            
+            // Verifica si la creación de la fecha resultó en 'Invalid Date'
+            if (isNaN(date.getTime())) {
+                throw new Error('La fecha/hora no es válida.');
+            }
+            
+            return true; // Si llegamos aquí, la fecha es válida.
+        })
+        .withMessage('La fecha de cierre debe ser un formato de fecha y hora válido')
 ];
 
 // --- Validators ---

@@ -195,6 +195,11 @@ const router = express.Router();
  *               value:
  *                 position: "Desarrollador Senior"
  *                 salary: 550000
+ *                 first_name: "Luciano"
+ *                 last_name: "Copa"
+ *                 dni: "40222111"
+ *                 phone: "1133445566"
+ * 
  *     responses:
  *       200:
  *         description: Empleado actualizado correctamente

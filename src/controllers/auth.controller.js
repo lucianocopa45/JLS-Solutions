@@ -27,7 +27,7 @@ export const login = async (req, res) => {
         role: user.role_name,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "2h" }
     );
 
     console.log("Token Generado", token);

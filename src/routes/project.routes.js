@@ -97,7 +97,7 @@ const router = express.Router();
  *             id_client: 5
  *             id_manager: 2
  *             budget: 250000
- *             closed_at: null
+ *             closed_at: "2026-03-25"
  *     responses:
  *       201:
  *         description: Proyecto creado exitosamente
@@ -241,7 +241,7 @@ const router = express.Router();
  *             id_client: 4
  *             id_manager: 1
  *             budget: 300000
- *             closed_at: null
+ *             closed_at: "2026-03-25"
  *     responses:
  *       200:
  *         description: Proyecto actualizado correctamente
