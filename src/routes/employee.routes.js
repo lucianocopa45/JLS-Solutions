@@ -258,11 +258,11 @@ const router = express.Router();
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 
-router.post('/postEmployee', auth, authorizeRole(["ADMIN"]),validatorCreateEmployee,controller.postEmployee);
+router.post('/postEmployee', auth, authorizeRole(["ADMIN", "EMPLEADO"]),validatorCreateEmployee,controller.postEmployee);
 router.get('/paginatedEmploye/:page/:limit', auth, authorizeRole(["ADMIN"]),validatorPageEmployee, controller.paginatedEmployee);
 router.get('/getByIdEmployee/:id', auth, authorizeRole(["ADMIN"]),validatorGetEmployeeById,controller.getEmployeeById);
 router.get('/getEmployeeById/:dni', auth, authorizeRole(["ADMIN"]),controller.getEmployeeByDni);
-router.put('/putEmployee/:id', auth, authorizeRole(["ADMIN"]),validatorUpdateEmployee, controller.putEmployee);
+router.put('/putEmployee/:id', auth, authorizeRole(["ADMIN", "EMPLEADO"]),validatorUpdateEmployee, controller.putEmployee);
 router.delete('/deleteEmployeById/:id', auth, authorizeRole(["ADMIN"]),controller.deleteEmployee);
 
 export default router;

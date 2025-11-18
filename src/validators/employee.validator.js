@@ -1,9 +1,12 @@
 import { check, param } from 'express-validator';
 import { validatorResult } from '../helpers/validate.helper.js';
-
+import { getRoleIdByUserId } from '../services/user.service.js';
+import ApiError from '../utils/ApiError.js';
 /**
  * Validación para la creación de un nuevo empleado (POST)
  */
+const ROL_REQUERIDO_EMPLEADO = 2;
+
 export const validatorCreateEmployee = [
   // --- REGLAS DE NEGOCIO ---
   // --- VALIDACIÓN DE CAMPOS ---
@@ -53,7 +56,27 @@ export const validatorCreateEmployee = [
     .escape()
     .notEmpty().withMessage('El ID de usuario es requerido')
     .isInt({ gt: 0 }).withMessage('El ID de usuario debe ser un número entero positivo')
-    .toInt(), // Sanitización: convierte a entero
+    .toInt() // Sanitización: convierte a entero
+
+    // VALIDACIÓN DE INTEGRIDAD Y DE ROL
+    .custom(async (idUser) => {
+        
+        // 1. Obtener el rol actual del usuario de la DB
+        const rolIdAsignado = await getRoleIdByUserId(idUser); // Función que busca id_role por id_use
+        if (rolIdAsignado === null) {
+            // El ID de usuario no existe, se lanza error.
+            throw new ApiError(400, `El usuario con ID ${idUser} no existe en la tabla de usuarios.`);
+        }
+        
+        // 2. Comparar el rol del usuario con el rol requerido (EMPLEADO = 2)
+        if (rolIdAsignado !== ROL_REQUERIDO_EMPLEADO) {
+            // Si el rol es incorrecto (ej. 1 o 3), se lanza un error específico.
+            throw new ApiError(400, `El usuario con ID ${idUser} tiene el rol ID ${rolIdAsignado}. Para crear un registro de Empleado, el usuario debe tener el rol ID ${ROL_REQUERIDO_EMPLEADO} (Empleado).`);
+        }
+        
+        // Pasa la validación si el usuario existe y su rol es 2
+        return true;
+    }),
 
   // Middleware final que maneja los resultados de la validación
     (req, res, next) => validatorResult(req, res, next)

@@ -136,3 +136,20 @@ export const createLogin = async (data) => {
         throw error;
     }
 }
+
+export const getRoleIdByUserId = async (idUser) => {
+    try {
+        const query = 'SELECT id_role FROM user WHERE id_user = ?';
+        
+        // 🚨 Importante: tu tabla se llama 'user' o 'users'? Asegúrate de usar el nombre correcto.
+        const [rows] = await db.query(query, [idUser]);
+        
+        // Retorna el id_role si se encuentra una fila, o null si el array está vacío
+        return rows[0] ? rows[0].id_role : null;
+        
+    } catch (error) {
+        // En caso de error de DB (ej. conexión), lanza el error para que sea manejado
+        console.error("Error al obtener el rol del usuario:", error);
+        throw error;
+    }
+};
