@@ -16,9 +16,14 @@ export const postTask = async (req, res) => {
 // GET /tasks?page=x&limit=y
 export const listTasks = async (req, res) => {
     try {
-        const page = Number(req.params.page);
-        const limit = Number(req.params.limit);
-        const dataTasks = await taskService.listTasks(page, limit);
+        const page = parseInt(req.params.page, 10) || 1; 
+        const limit = parseInt(req.params.limit, 10) || 10;
+        
+        // Verificación extra para prevenir valores negativos si el validador falla:
+        const safePage = page > 0 ? page : 1;
+        const safeLimit = limit > 0 ? limit : 10;
+
+        const dataTasks = await taskService.listTasks(safePage, safeLimit);
 
         if (!dataTasks || dataTasks.data.length === 0) {
             return res.status(404).json({ error: "No se encontraron tareas" });
