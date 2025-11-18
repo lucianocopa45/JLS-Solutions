@@ -2,7 +2,7 @@
 
 import ApiError from "./ApiError.js";
 
-export const serviceHandleMySQLError = (error, dataDb = {}) => {
+export const serviceHandleMySQLError = (error, referencedId = {}) => {
 
     console.error("Error crudo de DB:", error);
 
@@ -21,15 +21,15 @@ export const serviceHandleMySQLError = (error, dataDb = {}) => {
         case "ER_NO_REFERENCED_ROW_2":
             // Fallo de FK: id_project o id_service no existen
             if (error.sqlMessage.includes("id_project")) {
-                throw new ApiError(400, `El proyecto con id ${dataDb.id_project} no existe.`);
+                throw new ApiError(400, `El proyecto con id ${referencedId} no existe.`);
             }
             if (error.sqlMessage.includes("id_service")) {
                 // Aquí usamos el plural si los datos vienen como una lista (asignación masiva)
-                const serviceId = Array.isArray(dataDb.services) 
-                                ? "uno de los servicios" 
-                                : dataDb.id_service;
+                // const serviceId = Array.isArray(dataDb.services) 
+                //                 ? "uno de los servicios" 
+                //                 : dataDb.id_service;
                 
-                throw new ApiError(400, `El servicio con id ${serviceId} no existe.`);
+                throw new ApiError(400, `El servicio con id ${referencedId} no existe.`);
             }
             throw new ApiError(400, "Referencia a un registro inexistente (Clave Foránea).");
 

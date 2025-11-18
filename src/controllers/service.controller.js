@@ -116,8 +116,9 @@ export const getServicesByProject = async (req, res) => {
 
 // PUT /services/project/:idProject (Sobrescribir asignaciones)
 export const putProjectServices = async (req, res) => {
+    let idProject;
     try {
-        const idProject = parseInt(req.params.idProject);
+        idProject = parseInt(req.params.idProject);
         const services = req.body.services || []; 
 
         const result = await serviceService.updateProjectServices(idProject, services);
@@ -127,6 +128,8 @@ export const putProjectServices = async (req, res) => {
             data: result
         });
     } catch (error) {
-        serviceHandleMySQLError(error, req.body, res); 
+        const apiError = serviceHandleMySQLError(error, idProject);
+        
+        next(apiError);
     }
 }
