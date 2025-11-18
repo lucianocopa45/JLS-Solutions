@@ -35,9 +35,15 @@ export const createTask = async (data) => {
 
 // GET - Listar Tareas con Paginación
 export const listTasks = async (page, limit) => {
-    const offset = (page - 1) * limit;
+    let offset = (page - 1) * limit;
 
-    const [rows] = await db.query("SELECT * FROM tasks LIMIT ? OFFSET ?", [limit, offset]);
+    const safeLimit = parseInt(limit, 10);
+    const safeOffset = parseInt(offset, 10);
+
+    console.log('Tipo de Limit:', typeof safeLimit, 'Valor:', safeLimit);
+    console.log('Tipo de Offset:', typeof safeOffset, 'Valor:', safeOffset);
+    // Deberían decir 'number'
+    const [rows] = await db.query("SELECT * FROM tasks LIMIT ? OFFSET ?", [safeLimit, safeOffset]);
     const [countResult] = await db.query("SELECT COUNT(*) AS total FROM tasks");
     const totalItems = countResult[0]?.total || 0;
     const totalPages = Math.ceil(totalItems / limit);
