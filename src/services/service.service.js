@@ -146,7 +146,7 @@ export const assignServicesToProject = async (idProject, services) => {
         
         // El formato de la consulta es correcto: usa PLACEHOLDERS (?)
         const query = `
-            INSERT INTO Project_Service (id_project, id_service, quantity, unit_price)
+            INSERT INTO project_service (id_project, id_service, quantity, unit_price)
             VALUES ${placeholders};
         `;
         
@@ -175,7 +175,7 @@ export const getServicesByProject = async (idProject) => {
                 ps.unit_price,
                 s.price AS base_price
             FROM 
-                Project_Service ps
+                project_service ps
             JOIN 
                 Services s ON ps.id_service = s.id_service
             WHERE 
@@ -196,7 +196,7 @@ export const updateProjectServices = async (idProject, services) => {
         // Ejecución de la lógica de la transacción:
         
         // 1. Eliminar todas las asignaciones existentes para el proyecto
-        const deleteQuery = 'DELETE FROM Project_Service WHERE id_project = ?;';
+        const deleteQuery = 'DELETE FROM project_service WHERE id_project = ?;';
         await db.query(deleteQuery, [idProject]);
 
         if (services && services.length > 0) {
@@ -212,7 +212,7 @@ export const updateProjectServices = async (idProject, services) => {
             const flatValues = valueRows.flat();
 
             const insertQuery = `
-                INSERT INTO Project_Service (id_project, id_service, quantity, unit_price)
+                INSERT INTO project_service (id_project, id_service, quantity, unit_price)
                 VALUES ${placeholders};
             `;
             const [result] = await db.query(insertQuery, flatValues);
