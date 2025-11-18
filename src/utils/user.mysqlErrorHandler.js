@@ -18,7 +18,22 @@ export const userHandleMySQLError = (error, dataDb = {}) => {
             throw new ApiError(400, "Dato duplicado en un campo único.");
 
         case "ER_NO_REFERENCED_ROW_2":
-            throw new ApiError(400, `El rol con id ${dataDb.id_role} no existe.`);
+            let roleId = dataDb.id_role;
+
+            // Si dataDb.id_role no está definido o es cero, intentamos extraer el valor del SQLMessage
+            if (!roleId || roleId === 0) {
+                // Esto es una técnica de fallback para intentar obtener el número que causó el fallo
+                const match = error.sqlMessage.match(/\d+/);
+                roleId = match ? match[0] : "proporcionado"; 
+            }
+
+            // Verificar si el error se relaciona con la FK de roles
+            if (error.sqlMessage && error.sqlMessage.includes("id_role")) {
+                throw new ApiError(400, `El rol con id ${roleId} no existe.`);
+            }
+            
+            // Si es otra FK que no esperabas (ej. un id_department desconocido)
+            throw new ApiError(400, "Referencia a un registro inexistente (Clave Foránea).");
 
         case "ER_ROW_IS_REFERENCED_2":
             throw new ApiError(400, "No se puede eliminar este usuario porque está referenciado (ej. es un empleado).");

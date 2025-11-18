@@ -1,8 +1,9 @@
 // validators/user.validator.js
 
 import { check, param, query } from 'express-validator';
+import { validatorResult } from '../helpers/validate.helper.js';
 
-const validatorResult = (req, res, next) => next(); // Mock o tu helper real
+// const validatorResult = (req, res, next) => next(); // Mock o tu helper real
 
 export const validatorCreateUser = [
     check('email')
@@ -11,8 +12,15 @@ export const validatorCreateUser = [
     
     check('password')
         .notEmpty().withMessage('La contraseña es requerida')
-        .isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
-
+        .bail()
+        .isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres')
+    .isStrongPassword({
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+        symbols: '!@#$%^&*()+-=[]{};:"|,./<>?_`~'
+    }).withMessage('La contraseña debe incluir al menos una mayúscula, una minúscula, un número y un símbolo.'),
     check('username')
         .trim().notEmpty().withMessage('El nombre de usuario es requerido')
         .isLength({ min: 3, max: 45 }).withMessage('El username debe tener entre 3 y 45 caracteres'),
@@ -28,7 +36,14 @@ export const validatorUpdateUser = [
     param('id').exists().isInt({ min: 1 }).toInt(),
     
     check('email').optional().isEmail().withMessage('Formato de email inválido'),
-    check('password').optional().isLength({ min: 6 }).withMessage('Contraseña debe tener al menos 6 caracteres'),
+    check('password').optional().isLength({ min: 6 }).withMessage('Contraseña debe tener al menos 6 caracteres')
+    .isStrongPassword({
+        minLength: 6,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+    }).withMessage('La contraseña debe incluir al menos una mayúscula, una minúscula, un número y un símbolo.'),
     check('username').optional().isLength({ min: 3, max: 45 }),
     check('id_role').optional().isInt({ gt: 0 }).toInt(),
     

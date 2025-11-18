@@ -11,7 +11,7 @@ const router = express.Router();
  * @swagger
  * tags:
  *   - name: Employees
- *     description: CRUD de empleados
+ *     description: Gestión de empleados
  *
  * components:
  *   schemas:
