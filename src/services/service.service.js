@@ -177,7 +177,7 @@ export const getServicesByProject = async (idProject) => {
             FROM 
                 project_service ps
             JOIN 
-                Services s ON ps.id_service = s.id_service
+                services s ON ps.id_service = s.id_service
             WHERE 
                 ps.id_project = ?;
         `;
