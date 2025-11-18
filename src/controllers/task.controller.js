@@ -16,8 +16,8 @@ export const postTask = async (req, res) => {
 // GET /tasks?page=x&limit=y
 export const listTasks = async (req, res) => {
     try {
-        const page = parseInt(req.query.page) || 1; 
-        const limit = parseInt(req.query.limit) || 10;
+        const page = Number(req.params.page);
+        const limit = Number(req.params.limit);
         const dataTasks = await taskService.listTasks(page, limit);
 
         if (!dataTasks || dataTasks.data.length === 0) {

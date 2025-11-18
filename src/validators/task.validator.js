@@ -39,8 +39,16 @@ export const validatorUpdateTask = [
 ];
 
 export const validatorQueryPagination = [
-    query('page').optional().isInt({ min: 1 }).toInt(),
-    query('limit').optional().isInt({ min: 1 }).toInt(),
+    param('page')
+        .exists().withMessage('page es requerido')
+        .isInt({ min: 1 }).withMessage('page debe ser un número entero positivo')
+        .toInt(),
+
+    param('limit')
+        .exists().withMessage('limit es requerido')
+        .isInt({ min: 1 }).withMessage('limit debe ser un número entero positivo')
+        .toInt(),
+
     (req, res, next) => validatorResult(req, res, next)
 ];
 
