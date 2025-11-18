@@ -7,7 +7,7 @@ import { db } from '../config/database.js'; // Asumiendo tu configuración de DB
 // -----------------------------------------------------------
 export const createService = async (data) => {
     try {
-        const query = "INSERT INTO Services(service_name, description, price) VALUES (?,?,?);";
+        const query = "INSERT INTO services(service_name, description, price) VALUES (?,?,?);";
         
         const newService = new Service(
             null, 
@@ -36,12 +36,12 @@ export const listServices = async (page, limit) => {
 
         // 1) Datos paginados
         const [rows] = await db.query(
-            "SELECT * FROM Services LIMIT ? OFFSET ?",
+            "SELECT * FROM services LIMIT ? OFFSET ?",
             [limit, offset]
         );
 
         // 2) Total de registros
-        const [countResult] = await db.query("SELECT COUNT(*) AS total FROM Services");
+        const [countResult] = await db.query("SELECT COUNT(*) AS total FROM services");
         const totalItems = countResult[0]?.total || 0;
 
         // 3) Cálculo seguro
@@ -63,7 +63,7 @@ export const listServices = async (page, limit) => {
 // -----------------------------------------------------------
 export const getServiceById = async (idService) => {
     try {
-        const query = 'SELECT * FROM Services WHERE id_service = ?;';
+        const query = 'SELECT * FROM services WHERE id_service = ?;';
         const [rows] = await db.query(query, [idService]);
         
         return rows[0] || null; // Devolver el objeto o null
@@ -76,7 +76,7 @@ export const getServiceById = async (idService) => {
 // -----------------------------------------------------------
 export const updateService = async (idService, data) => {
     try {
-        const query = 'UPDATE Services SET service_name = ?, description = ?, price = ? WHERE id_service = ?;';
+        const query = 'UPDATE services SET service_name = ?, description = ?, price = ? WHERE id_service = ?;';
         
         const serviceUpdate = new Service(
             null,
@@ -101,7 +101,7 @@ export const updateService = async (idService, data) => {
 // -----------------------------------------------------------
 export const deleteServiceById = async (idService) => {
     try {
-        const query = 'DELETE FROM Services WHERE id_service = ?;';
+        const query = 'DELETE FROM services WHERE id_service = ?;';
         const [result] = await db.query(query, [idService]);
         
         return result;

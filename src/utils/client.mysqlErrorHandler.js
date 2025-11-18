@@ -26,7 +26,7 @@ export const clientHandleMySQLError = (error, dataDb = {}) => {
             throw new ApiError(400, "No se puede eliminar este cliente porque está asociado a uno o más proyectos.");
 
         case "ER_BAD_NULL_ERROR":
-            throw new ApiError(400, "Falta un dato obligatorio (first_name).");
+            throw new ApiError(400, "Falta un dato obligatorio (id_user).");
 
         case "ER_TRUNCATED_WRONG_VALUE_FOR_FIELD":
         case "ER_DATA_TOO_LONG":

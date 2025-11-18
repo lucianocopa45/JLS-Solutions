@@ -45,6 +45,9 @@ const router = express.Router();
  *           type: string
  *         address:
  *           type: string
+ *         client_status:
+ *           type: string
+ * 
  *       example:
  *         id_client: 1
  *         first_name: "Luciano"
@@ -52,6 +55,7 @@ const router = express.Router();
  *         email: "lucho@example.com"
  *         phone: "1133445566"
  *         address: "Av. Siempreviva 742"
+ *         client_status: "Activo"
  *         id_user: 1
  * 
  *     ClientCreate:
@@ -71,6 +75,8 @@ const router = express.Router();
  *           type: string
  *         address:
  *           type: string
+ *         client_status:
+ *           type: string
  *         id_user: 
  *         type: integer
  * 
@@ -80,6 +86,7 @@ const router = express.Router();
  *         email: "lucho@example.com"
  *         phone: "1133445566"
  *         address: "Buenos Aires"
+ *         client_status: "Activo"
  *         id_user: 1
  * 
  *     ClientUpdate:
@@ -89,15 +96,31 @@ const router = express.Router();
  *           type: string
  *         last_name:
  *           type: string
+ *         company_name:
+ *           type: string
+ *         industry:
+ *           type: string
  *         phone:
  *           type: string
  *         address:
  *           type: string
+ *         email:
+ *           type: string
+ *         client_status:
+ *           type: string
+ *         id_user:
+ *           type: integer
+ * 
  *       example:
  *         first_name: "Lucho"
  *         last_name: "Copa"
+ *         company_name: "Personal Flow"
+ *         industry: "dwad"
  *         phone: "1122334455"
  *         address: "CABA"
+ *         email: "gonza1@example.com"
+ *         client_status: "Activo"
+ *         id_user: 1
  */
 
 /**
