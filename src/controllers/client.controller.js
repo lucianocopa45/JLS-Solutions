@@ -19,8 +19,14 @@ export const postClient = async (req, res) => {
 // --- GET Paginated ---
 export const paginatedClients = async (req, res) => {
     try{
-        const page = parseInt(req.params.page);
-        const limit = parseInt(req.params.limit);
+        const pageRaw = parseInt(req.query.page) || 1; 
+        const limitRaw = parseInt(req.query.limit) || 10;
+
+        const page = (isNaN(pageRaw) || pageRaw <= 0) ? 1 : pageRaw;
+        const limit = (isNaN(limitRaw) || limitRaw <= 0) ? 10 : limitRaw;
+
+        console.log(`Página: ${page}, Límite: ${limit}`);
+        
         const dataClients = await listClients(page, limit);
 
         if (!dataClients.data || dataClients.data.length === 0) {
