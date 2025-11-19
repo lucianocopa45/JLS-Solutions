@@ -43,6 +43,7 @@ export const validatorUpdateUser = [
         minUppercase: 1,
         minNumbers: 1,
         minSymbols: 1,
+        symbols: '!@#$%^&*()+-=[]{};:"|,./<>?_`~'
     }).withMessage('La contraseña debe incluir al menos una mayúscula, una minúscula, un número y un símbolo.'),
     check('username').optional().isLength({ min: 3, max: 45 }),
     check('id_role').optional().isInt({ gt: 0 }).toInt(),

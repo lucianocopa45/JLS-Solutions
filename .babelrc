@@ -1,11 +1,20 @@
-// .babelrc
 {
+  // El campo "presets" define un conjunto de plugins de Babel preconfigurados que se ejecutan
+  // en un orden específico. Es la forma más común de usar transformaciones de código.
   "presets": [
     [
+      // El primer elemento de este array es el nombre del preset.
+      // @babel/preset-env: Es el preset inteligente que permite usar el JavaScript más reciente
+      // (ES6, ES7, etc.) y transpilarlo al código que el entorno de destino (targets) entiende.
+      // Solo incluye las transformaciones necesarias basándose en los "targets" definidos,
+      // optimizando el tamaño del bundle.
       "@babel/preset-env",
       {
+        // El segundo elemento del array es un objeto que contiene las opciones para el preset-env.
+        // La opción "targets" es crucial; especifica los entornos a los que está dirigido el código final.
         "targets": {
-          "node": "current"
+          // La clave "node" indica que el código está destinado a ejecutarse en un entorno Node.js.
+          "node": "current" // Este valor le dice a Babel que compile el código para la versión de Node.js que se está utilizando actualmente.
         }
       }
     ]
