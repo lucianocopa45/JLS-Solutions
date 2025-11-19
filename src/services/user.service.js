@@ -3,12 +3,12 @@ import { db } from "../config/database.js";
 
 export const listUsers = async (page, limit) => {
     try {
-        const offset = (page - 1) * limit;
+        let offset = (page - 1) * limit;
 
         const cleanLimit = Math.floor(limit);
         const cleanOffset = Math.floor(offset);
 
-        const [rows] = await db.query(`SELECT id_user, email, username, created_at, id_role FROM user LIMIT ${cleanLimit} OFFSET ${cleanOffset}`);
+        const [rows] = await db.query(`SELECT * FROM user LIMIT ${cleanLimit} OFFSET ${cleanOffset}`);
         const [countResult] = await db.query("SELECT COUNT(*) AS total FROM user");
         const totalItems = countResult[0]?.total || 0;
         const totalPages = Math.ceil(totalItems / limit);

@@ -43,12 +43,12 @@ export const createProject = async (data) => {
 // --- LIST / PAGINATE --- (La lógica es la misma)
 export const listProjects = async (page, limit) => {
     try {
-        const offset = (page - 1) * limit;
+        let offset = (page - 1) * limit;
 
         const cleanLimit = Math.floor(limit);
         const cleanOffset = Math.floor(offset);
 
-        const [rows] = await db.query(`SELECT id_project, name, start_date, status, budget, updated_at FROM projects LIMIT ${cleanLimit} OFFSET ${cleanOffset}`);
+        const [rows] = await db.query(`SELECT * FROM projects LIMIT ${cleanLimit} OFFSET ${cleanOffset}`);
         const [countResult] = await db.query("SELECT COUNT(*) AS total FROM projects");
         const totalItems = countResult[0]?.total || 0;
         const totalPages = Math.ceil(totalItems / limit);
