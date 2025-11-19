@@ -16,9 +16,16 @@ export const postUser = (req, res) =>{
 
 export const listUsersPage = async (req, res) => {
     try {
-        const page = parseInt(req.query.page) || 1; 
-        const limit = parseInt(req.query.limit) || 10;
+        const pageRaw = parseInt(req.query.page) || 1; 
+        const limitRaw = parseInt(req.query.limit) || 10;
+
+        const page = (isNaN(pageRaw) || pageRaw <= 0) ? 1 : pageRaw;
+        const limit = (isNaN(limitRaw) || limitRaw <= 0) ? 10 : limitRaw;
+
+        console.log(`Página: ${page}, Límite: ${limit}`);
+        
         const dataUsers = await listUsers(page, limit);
+
         if (!dataUsers || dataUsers.data.length === 0) {
             return res.status(404).json({ error: "No se encontraron usuarios" });
         }

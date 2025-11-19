@@ -15,8 +15,15 @@ export const postEmployee = async (req, res) => {
 
 export const paginatedEmployee = async (req, res) => {  
     try{
-    const page = parseInt(req.params.page)
-    const limit = parseInt(req.params.limit);
+
+    const pageRaw = parseInt(req.query.page) || 1; 
+    const limitRaw = parseInt(req.query.limit) || 10
+
+    const page = (isNaN(pageRaw) || pageRaw <= 0) ? 1 : pageRaw;
+    const limit = (isNaN(limitRaw) || limitRaw <= 0) ? 10 : limitRaw
+    
+    console.log(`Página: ${page}, Límite: ${limit}`);
+
     const dataEmployee = await listEmployee(page, limit);
 
     if (!dataEmployee) {

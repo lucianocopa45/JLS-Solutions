@@ -32,13 +32,13 @@ export const createEmployee = async (data) => {
 
 export const listEmployee = async (page, limit) => {
     try{
-  const offset = (page - 1) * limit;
+    let offset = (page - 1) * limit;
+
+    const cleanLimit = Math.floor(limit);
+    const cleanOffset = Math.floor(offset);
 
   // 1) Datos paginados
-    const [rows] = await db.query(
-    "SELECT * FROM employee LIMIT ? OFFSET ?",
-    [limit, offset]
-    );
+    const [rows] = await db.query(`SELECT * FROM employee LIMIT ${cleanLimit} OFFSET ${cleanOffset}`);
 
   // 2) Total de registros
     const [countResult] = await db.query(
