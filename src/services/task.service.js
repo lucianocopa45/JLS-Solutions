@@ -37,13 +37,13 @@ export const createTask = async (data) => {
 export const listTasks = async (page, limit) => {
     let offset = (page - 1) * limit;
 
-    const safeLimit = parseInt(limit, 10);
-    const safeOffset = parseInt(offset, 10);
+    const cleanLimit = Math.floor(limit);
+    const cleanOffset = Math.floor(offset);
 
-    console.log('Tipo de Limit:', typeof safeLimit, 'Valor:', safeLimit);
-    console.log('Tipo de Offset:', typeof safeOffset, 'Valor:', safeOffset);
+    // console.log('Tipo de Limit:', typeof safeLimit, 'Valor:', safeLimit);
+    // console.log('Tipo de Offset:', typeof safeOffset, 'Valor:', safeOffset);
     // Deberían decir 'number'
-    const [rows] = await db.query("SELECT * FROM tasks LIMIT ? OFFSET ?", [safeLimit, safeOffset]);
+    const [rows] = await db.query(`SELECT * FROM tasks LIMIT ${cleanLimit} OFFSET ${cleanOffset}`);
     const [countResult] = await db.query("SELECT COUNT(*) AS total FROM tasks");
     const totalItems = countResult[0]?.total || 0;
     const totalPages = Math.ceil(totalItems / limit);
