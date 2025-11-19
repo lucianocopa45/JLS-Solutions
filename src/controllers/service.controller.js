@@ -16,8 +16,8 @@ export const postService = async (req, res) => {
 // GET /services?page=x&limit=y
 export const listServices = async (req, res) => {
     try {
-        const pageRaw = parseInt(req.query.page) || 1; 
-        const limitRaw = parseInt(req.query.limit) || 10;
+        const pageRaw = parseInt(req.params.page); 
+        const limitRaw = parseInt(req.params.limit);
 
         const page = (isNaN(pageRaw) || pageRaw <= 0) ? 1 : pageRaw;
         const limit = (isNaN(limitRaw) || limitRaw <= 0) ? 10 : limitRaw;

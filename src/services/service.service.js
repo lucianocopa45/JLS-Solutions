@@ -32,7 +32,7 @@ export const createService = async (data) => {
 // -----------------------------------------------------------
 export const listServices = async (page, limit) => {
     try {
-        const offset = (page - 1) * limit;
+        let offset = (page - 1) * limit;
 
         const cleanLimit = Math.floor(limit);
         const cleanOffset = Math.floor(offset);
